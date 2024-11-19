@@ -17,7 +17,7 @@ class Store: ObservableObject {
     @Published var error: Error?
     @Published var purchasedIDs = Set<String>()
     
-    private var productIDs = ["infLists"]
+    private var productIDs = ["infList"]
     
     private var updates: Task<Void, Never>? = nil
     

@@ -20,7 +20,7 @@ struct ContentView: View {
     @State private var addBounce = false
     
     private var unlockedMoreThanThree: Bool {
-        store.purchasedIDs.contains("infLists")
+        store.purchasedIDs.contains("infList")
     }
     
     private var canAddChecklist: Bool {
@@ -136,7 +136,7 @@ struct ContentView: View {
             return
         }
         
-        guard let product = store.products.first(where: { $0.id == "infLists" }) else {
+        guard let product = store.products.first(where: { $0.id == "infList" }) else {
             print("Product not found")
             return
         }
