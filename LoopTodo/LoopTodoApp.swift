@@ -49,6 +49,8 @@ struct ListsLoopApp: App {
 //
 // ✅ Make this app work for previous versions of iOS
 //
+// ✅ Restore purchases option
+//
 // Version 2.0 Features
 //
 // ✅ Add priorities to task list items
@@ -63,6 +65,8 @@ struct ListsLoopApp: App {
 //
 // Background on main screen with a call to action
 // when there are no active lists
+//
+// Show/Hide the item detail sections
 //
 // Templates as an option when adding a new list
 //

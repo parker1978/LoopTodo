@@ -17,6 +17,8 @@ struct ChecklistDetailView: View {
     @State private var shouldRotate = false
     @State private var addBounce = false
     @State private var sortOrder: SortOrder = .manual
+    @State private var showIncomplete = true
+    @State private var showCompleted = true
         
     enum SortOrder {
         case manual
@@ -46,20 +48,60 @@ struct ChecklistDetailView: View {
             .padding()
             
             List {
-                Section(header: Text("Incomplete" + (incompleteCount > 0 ? " (\(incompleteCount))" : ""))) {
-                    ForEach(sortedItems(filterCompleted: false)) { item in
-                        ChecklistItemView(item: item)
+                // Toggle for Incomplete Section
+                if incompleteCount > 0 {
+                    Section {
+                        if showIncomplete {
+                            ForEach(sortedItems(filterCompleted: false)) { item in
+                                ChecklistItemView(item: item)
+                            }
+                            .onDelete(perform: deleteIncompleteItems)
+                            .onMove(perform: moveItems)
+                        }
+                    } header: {
+                        HStack {
+                            Text("Incomplete" + (incompleteCount > 0 ? " (\(incompleteCount))" : ""))
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    showIncomplete.toggle()
+                                }
+                            }) {
+                                Text(showIncomplete ? "Hide" : "Show")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                            }
+                            .buttonStyle(BorderlessButtonStyle()) // For smooth list interaction
+                        }
                     }
-                    .onDelete(perform: deleteIncompleteItems)
-                    .onMove(perform: moveItems)
                 }
                 
-                Section(header: Text("Completed" + (completedCount > 0 ? " (\(completedCount))" : ""))) {
-                    ForEach(sortedItems(filterCompleted: true)) { item in
-                        ChecklistItemView(item: item)
+                // Toggle for Completed Section
+                if completedCount > 0 {
+                    Section {
+                        if showCompleted {
+                            ForEach(sortedItems(filterCompleted: true)) { item in
+                                ChecklistItemView(item: item)
+                            }
+                            .onDelete(perform: deleteCompletedItems)
+                            .onMove(perform: moveItems)
+                        }
+                    } header: {
+                        HStack {
+                            Text("Completed" + (completedCount > 0 ? " (\(completedCount))" : ""))
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    showCompleted.toggle()
+                                }
+                            }) {
+                                Text(showCompleted ? "Hide" : "Show")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                        }
                     }
-                    .onDelete(perform: deleteCompletedItems)
-                    .onMove(perform: moveItems)
                 }
             }
             .task {

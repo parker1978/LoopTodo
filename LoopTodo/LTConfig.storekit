@@ -14,21 +14,7 @@
 
   ],
   "products" : [
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : true,
-      "internalID" : "1725A4E4",
-      "localizations" : [
-        {
-          "description" : "Create more than 3 lists",
-          "displayName" : "Infinite Lists",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "infList",
-      "referenceName" : "InfiniteLists",
-      "type" : "NonConsumable"
-    }
+
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
@@ -83,7 +69,48 @@
     ]
   },
   "subscriptionGroups" : [
+    {
+      "id" : "BEA5EBC7",
+      "localizations" : [
 
+      ],
+      "name" : "Unlimited",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "A6204667",
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "F420050C",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "Unlock the full app and create unlimited lists.",
+              "displayName" : "Unlimited Lists",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "unlimited",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "unlimited",
+          "subscriptionGroupID" : "BEA5EBC7",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
   ],
   "version" : {
     "major" : 4,

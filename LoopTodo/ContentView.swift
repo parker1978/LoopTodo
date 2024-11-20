@@ -18,9 +18,10 @@ struct ContentView: View {
     @State private var sortOrder: SortOrder = .alphabetical
     @State private var showSortOrderText = false
     @State private var addBounce = false
+    @State var showSettings: Bool = false
     
     private var unlockedMoreThanThree: Bool {
-        store.purchasedIDs.contains("infList")
+        store.purchasedIDs.contains("unlimited")
     }
     
     private var canAddChecklist: Bool {
@@ -55,10 +56,11 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: unlock) {
-                        Image(systemName: unlockedMoreThanThree ? "lock.open.fill" : "lock.fill")
+                    Button {
+                        showSettings.toggle()
+                    } label: {
+                        Image(systemName: "gear")
                     }
-                    .disabled(unlockedMoreThanThree)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     if showSortOrderText {
@@ -107,7 +109,10 @@ struct ContentView: View {
         .alert("Checklist Limit Reached", isPresented: $showingUnlockAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("You have reached the maximum of 3 checklists. Purchase the full version to add unlimited checklists.")
+            Text("You have reached the maximum of 3 checklists. Subscribe for the full version to unlock unlimited checklists.")
+        }
+        .sheet(isPresented: $showSettings) {
+            Settings()
         }
         .preferredColorScheme(.dark)
     }
@@ -127,22 +132,6 @@ struct ContentView: View {
             withAnimation {
                 showSortOrderText = false
             }
-        }
-    }
-    
-    private func unlock() {
-        guard !store.products.isEmpty else {
-            print("Products not loaded")
-            return
-        }
-        
-        guard let product = store.products.first(where: { $0.id == "infList" }) else {
-            print("Product not found")
-            return
-        }
-        
-        Task {
-            await store.purchase(product)
         }
     }
 

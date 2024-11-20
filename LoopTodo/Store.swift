@@ -17,7 +17,7 @@ class Store: ObservableObject {
     @Published var error: Error?
     @Published var purchasedIDs = Set<String>()
     
-    private var productIDs = ["infList"]
+    private var productIDs = ["unlimited"]
     
     private var updates: Task<Void, Never>? = nil
     
@@ -64,7 +64,7 @@ class Store: ObservableObject {
         }
     }
     
-    private func checkPurchased() async {
+    func checkPurchased() async {
         for product in products {
             guard let state = await product.currentEntitlement else { return }
             
