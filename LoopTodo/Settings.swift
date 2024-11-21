@@ -88,6 +88,23 @@ struct Settings: View {
             
             Text("© 2024 Steve Parker")
             Text("https://www.parker1978.com")
+            
+            Spacer()
+            
+            HStack {
+                Link("Terms of Use", destination: URL(string:"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                    .foregroundColor(.blue)
+                    .underline()
+                    .font(.caption)
+                
+                Text("🟡")
+                
+                Link("Privacy Policy", destination: URL(string:"https://www.parker1978.com/privacy-policy-lla")!)
+                    .foregroundColor(.blue)
+                    .underline()
+                    .font(.caption)
+            }
+            
         }
         .onAppear {
             if unlocked {
