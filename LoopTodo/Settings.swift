@@ -11,6 +11,8 @@ import StoreKit
 struct Settings: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var store: Store
+    @State private var shadowRadius: CGFloat = 10
+    @State private var shadowColor: Color = .white
     @State private var showRestoreAlert = false
     @State private var restoreMessage = ""
     @State private var purchaseStatus: PurchaseStatus = .notStarted
@@ -42,9 +44,15 @@ struct Settings: View {
             Image(.loopTodo)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 250, height: 250)
+                .frame(width: 200, height: 200)
                 .clipShape(.rect(cornerRadius: 25))
-                .shadow(color: .white, radius: 10)
+                .shadow(color: shadowColor, radius: shadowRadius)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        shadowRadius = 15
+                        shadowColor = .blue
+                    }
+                }
             
             Text("LoopTodo")
                 .font(.largeTitle)
@@ -53,11 +61,13 @@ struct Settings: View {
             
             Text("This app is free to use with 3 lists.")
                 .font(.headline)
-                .padding()
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             
             Text("If you'd like to support the app, you can subscribe and get unlimited lists!")
-                .font(.system(size: 18))
+                .font(.body)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding()
                 
             switch purchaseStatus {
