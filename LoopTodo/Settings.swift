@@ -73,8 +73,11 @@ struct Settings: View {
                 
                 switch purchaseStatus {
                 case .notStarted:
-                    Button("Subscribe for $4.99 per year") {
+                    Button {
                         unlock()
+                    } label: {
+                        Text("Subscribe to Unlimited\nfor $4.99 per year")
+                            .multilineTextAlignment(.center) // Optional: Centers the text
                     }
                     .padding()
                 case .inProgress:
