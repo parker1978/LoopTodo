@@ -28,99 +28,101 @@ struct Settings: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
+        ScrollView {
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .font(.title2)
+                }
+                .padding()
+                
                 Spacer()
                 
-                Button("Done") {
-                    dismiss()
-                }
-                .font(.title2)
-            }
-            .padding()
-            
-            Spacer()
-            
-            Image(.loopTodo)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200, height: 200)
-                .clipShape(.rect(cornerRadius: 25))
-                .shadow(color: shadowColor, radius: shadowRadius)
-                .onAppear {
-                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
-                        shadowRadius = 15
-                        shadowColor = .blue
+                Image(.loopTodo)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .clipShape(.rect(cornerRadius: 25))
+                    .shadow(color: shadowColor, radius: shadowRadius)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                            shadowRadius = 15
+                            shadowColor = .blue
+                        }
                     }
-                }
-            
-            Text("LoopTodo")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            Text("This app is free to use with 3 lists.")
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-            
-            Text("If you'd like to support the app, you can subscribe and get unlimited lists!")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding()
                 
-            switch purchaseStatus {
-            case .notStarted:
-                Button("Subscribe for $4.99 per year") {
-                    unlock()
-                }
-                .padding()
-            case .inProgress:
-                ProgressView()
-            case .success:
-                Text("Thanks for your support! 🎉")
-                    .font(.title3)
+                Text("LoopTodo")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
                     .padding()
-            case .failed(error: let error):
-                Text(error.localizedDescription)
-            }
-            
-            Button("Restore Purchases") {
-                restorePurchases()
-            }
-            .padding()
-            .alert(isPresented: $showRestoreAlert) {
-                Alert(title: Text("Restore Purchases"), message: Text(restoreMessage), dismissButton: .default(Text("OK")))
-            }
-            
-            Spacer()
-            
-            Text("© 2024 Steve Parker")
-            Text("https://www.parker1978.com")
-            
-            Spacer()
-            
-            HStack {
-                Link("Terms of Use", destination: URL(string:"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                    .foregroundColor(.blue)
-                    .underline()
-                    .font(.caption)
                 
-                Text("🟡")
+                Text("This app is free to use with 3 lists.")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                 
-                Link("Privacy Policy", destination: URL(string:"https://www.parker1978.com/privacy-policy-lla")!)
-                    .foregroundColor(.blue)
-                    .underline()
-                    .font(.caption)
+                Text("If you'd like to support the app, you can subscribe and get unlimited lists!")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding()
+                
+                switch purchaseStatus {
+                case .notStarted:
+                    Button("Subscribe for $4.99 per year") {
+                        unlock()
+                    }
+                    .padding()
+                case .inProgress:
+                    ProgressView()
+                case .success:
+                    Text("Thanks for your support! 🎉")
+                        .font(.title3)
+                        .padding()
+                case .failed(error: let error):
+                    Text(error.localizedDescription)
+                }
+                
+                Button("Restore Purchases") {
+                    restorePurchases()
+                }
+                .padding()
+                .alert(isPresented: $showRestoreAlert) {
+                    Alert(title: Text("Restore Purchases"), message: Text(restoreMessage), dismissButton: .default(Text("OK")))
+                }
+                
+                Spacer()
+                
+                Text("© 2024 Steve Parker")
+                    .padding(.top, 60)
+                Text("https://www.parker1978.com")
+                    .padding(.bottom, 40)
+                                
+                HStack {
+                    Link("Terms of Use", destination: URL(string:"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                        .foregroundColor(.blue)
+                        .underline()
+                        .font(.caption)
+                    
+                    Text("🟡")
+                    
+                    Link("Privacy Policy", destination: URL(string:"https://www.parker1978.com/privacy-policy-lla")!)
+                        .foregroundColor(.blue)
+                        .underline()
+                        .font(.caption)
+                }
+                
             }
-            
-        }
-        .onAppear {
-            if unlocked {
-                purchaseStatus = .success
-            } else {
-                purchaseStatus = .notStarted
+            .onAppear {
+                if unlocked {
+                    purchaseStatus = .success
+                } else {
+                    purchaseStatus = .notStarted
+                }
             }
         }
     }
