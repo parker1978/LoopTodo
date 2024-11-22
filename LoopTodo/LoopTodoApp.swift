@@ -51,7 +51,9 @@ struct ListsLoopApp: App {
 //
 // ✅ Restore purchases option
 //
-// Version 2.0 Features
+// Subscription not included in app
+//
+// Version 1.0 Features
 //
 // ✅ Add priorities to task list items
 //
@@ -61,7 +63,15 @@ struct ListsLoopApp: App {
 //
 // ✅ Update app icon
 //
-// Version 3.0 Features
+// Version 2.0 Features
+//
+// Tap on text to edit
+//
+// Use siri to add items
+//
+// Keyboard controls:
+// * default case
+// * suggestions on/off
 //
 // Background on main screen with a call to action
 // when there are no active lists
@@ -70,9 +80,11 @@ struct ListsLoopApp: App {
 //
 // Templates as an option when adding a new list
 //
-// Count of how many time a list has been looped
+// Version 3.0+ Features
 //
-// Version 4.0 Features
+// Stats for nerds:
+// Count of how many times a list has been looped
+// Calendar with usage day hotspots
 //
 // Have a way to set a time or certain time of day
 // to get a notification about a particular list.
