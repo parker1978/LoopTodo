@@ -13,6 +13,7 @@ struct ChecklistDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var constants: Constants
     @Bindable var checklist: Checklist
+    @State private var showPopup: Bool = false
     @State private var newItemName: String = ""
     @State private var showingAddItemAlert = false
     @State private var shouldRotate = false
@@ -137,7 +138,9 @@ struct ChecklistDetailView: View {
                         
                         Spacer()
                         
-                        Button(action: addItem) {
+                        Button {
+                            showPopup.toggle()
+                        } label: {
                             Image(systemName: "plus.circle.fill")
                                 .symbolEffect(.bounce, value: addBounce)
                                 .fontWeight(.light)
@@ -148,32 +151,29 @@ struct ChecklistDetailView: View {
                     }
                 }
             }
-            .alert("Add New Item", isPresented: $showingAddItemAlert) {
-                TextField("Item Name", text: $newItemName)
-                    .textInputAutocapitalization(
-                        constants.textCasing == .firstWord ? .sentences :
-                            constants.textCasing == .allWords ? .words : .none
-                    )
-                    .disableAutocorrection(!constants.showSuggestions)
-                Button("Add", action: addItem)
-                Button("Cancel", role: .cancel) { }
+            .popView(isPresented: $showPopup) {
+                
+            } content: {
+                CustomAlertWithTextField(show: $showPopup, title: "Add Todo") { text in
+                    newItemName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    addItem()
+                }
             }
         }
     }
 
     // MARK: Functions
     private func addItem() {
-        showingAddItemAlert = true
-        addBounce.toggle()
-        
         guard !newItemName.isEmpty else { return }
         let order = checklist.items?.count ?? 0
-        let newItem = ChecklistItem(name: newItemName.trimmingCharacters(in: .whitespacesAndNewlines), order: order)
+        let newItem = ChecklistItem(name: newItemName, order: order)
         if checklist.items == nil {
             checklist.items = []
         }
         checklist.items?.append(newItem)
         newItemName = ""
+        
+        addBounce.toggle()
     }
     
     private func resetList() {

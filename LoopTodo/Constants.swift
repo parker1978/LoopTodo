@@ -11,6 +11,7 @@ import SwiftUI
 class Constants: ObservableObject {
     @AppStorage("textCasing") var textCasing: TextCasing = .allWords
     @AppStorage("showSuggestions") var showSuggestions: Bool = true
+    var popupBackgroundColor: Color = .white.opacity(0.25)
 }
 
 enum TextCasing: String, CaseIterable, Identifiable {

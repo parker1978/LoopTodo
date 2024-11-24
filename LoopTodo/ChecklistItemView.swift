@@ -5,6 +5,7 @@ import SwiftData
 struct ChecklistItemView: View {
     @Bindable var item: ChecklistItem
     @EnvironmentObject private var constants: Constants
+    @State private var showPopup: Bool = false
     @State private var isEditingAlertPresented: Bool = false
     @State private var tempName: String = ""
 
@@ -34,7 +35,7 @@ struct ChecklistItemView: View {
             Text(item.name)
                 .onTapGesture {
                     tempName = item.name
-                    isEditingAlertPresented = true
+                    showPopup.toggle()
                 }
             
             Spacer()
@@ -45,20 +46,14 @@ struct ChecklistItemView: View {
             }
             .buttonStyle(BorderlessButtonStyle())
         }
-        .alert("Edit Name", isPresented: $isEditingAlertPresented, actions: {
-            TextField("Enter new name", text: $tempName)
-                .textInputAutocapitalization(
-                    constants.textCasing == .firstWord ? .sentences :
-                        constants.textCasing == .allWords ? .words : .none
-                    )
-                .disableAutocorrection(!constants.showSuggestions)
-            Button("OK") {
-                item.name = tempName.trimmingCharacters(in: .whitespacesAndNewlines)
+        .popView(isPresented: $showPopup) {
+            
+        } content: {
+            CustomAlertWithTextField(show: $showPopup, title: "Edit Todo", defaultText: tempName) { text in
+                tempName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                item.name = tempName
             }
-            Button("Cancel", role: .cancel) {
-                // Discard changes
-            }
-        })
+        }
     }
     
     private func checkboxToggle() {

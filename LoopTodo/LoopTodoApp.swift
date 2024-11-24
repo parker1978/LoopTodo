@@ -67,21 +67,21 @@ struct ListsLoopApp: App {
 //
 // Version 2.0 Features
 //
+// ✅ Custom alerts view
+//
 // ✅ Tap on text to edit
 //
-// Use siri to add items
-//
-// Keyboard controls:
+// ✅ Keyboard controls:
 // * default case
 // * suggestions on/off
 //
 // ✅ Call to action when no lists
 //
-// Show/Hide the item detail sections
-//
-// Templates as an option when adding a new list
+// ✅ Show/Hide the item detail sections
 //
 // Version 3.0+ Features
+//
+// Use siri to add items (SiriKit?)
 //
 // Stats for nerds:
 // Count of how many times a list has been looped
@@ -91,3 +91,5 @@ struct ListsLoopApp: App {
 // to get a notification about a particular list.
 //
 // Import / Export data
+//
+// Templates as an option when adding a new list

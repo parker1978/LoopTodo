@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var store: Store
     @Query private var checklists: [Checklist]
+    @State private var showPopup: Bool = false
     @State private var newChecklistName: String = ""
     @State private var showingAddChecklistAlert = false
     @State private var showingUnlockAlert = false
@@ -95,7 +96,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .bottomBar) {
                         Button(action: {
                             if canAddChecklist {
-                                showingAddChecklistAlert = true
+                                showPopup.toggle()
                             } else {
                                 showingUnlockAlert = true
                                 print("Cannot add more checklists without purchasing")
@@ -112,10 +113,13 @@ struct ContentView: View {
         } detail: {
             Text("Select a checklist")
         }
-        .alert("New Checklist", isPresented: $showingAddChecklistAlert) {
-            TextField("Checklist Name", text: $newChecklistName)
-            Button("Add", action: addChecklist)
-            Button("Cancel", role: .cancel) { }
+        .popView(isPresented: $showPopup) {
+            
+        } content: {
+            CustomAlertWithTextField(show: $showPopup, title: "Add LoopTodo List") { text in
+                newChecklistName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                addChecklist()
+            }
         }
         .alert("Checklist Limit Reached", isPresented: $showingUnlockAlert) {
             Button("OK", role: .cancel) { }
@@ -133,12 +137,10 @@ struct ContentView: View {
         sortOrder = (sortOrder == .alphabetical) ? .byCreationDate : .alphabetical
         print("Sort order toggled to \(sortOrder == .alphabetical ? "alphabetical" : "creation date")")
         
-        // Show the sort order text with animation
         withAnimation {
             showSortOrderText = true
         }
         
-        // Hide the sort order text after 3 seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             withAnimation {
                 showSortOrderText = false
@@ -149,7 +151,7 @@ struct ContentView: View {
     private func addChecklist() {
         guard !newChecklistName.isEmpty else { return }
         withAnimation {
-            let newChecklist = Checklist(name: newChecklistName.trimmingCharacters(in: .whitespacesAndNewlines))
+            let newChecklist = Checklist(name: newChecklistName)
             modelContext.insert(newChecklist)
             newChecklistName = ""
         }
