@@ -1,20 +1,16 @@
-//
-//  ChecklistItemView.swift
-//  ListLoop
-//
-//  Created by Steve Parker on 11/2/24.
-//
-
 import SwiftUI
 import SwiftData
 
 // A view for displaying a single checklist item with a toggle for completion
 struct ChecklistItemView: View {
     @Bindable var item: ChecklistItem
+    @EnvironmentObject private var constants: Constants
+    @State private var isEditingAlertPresented: Bool = false
+    @State private var tempName: String = ""
 
     var body: some View {
         HStack {
-            //Priority menu
+            // Priority menu
             Menu {
                 ForEach(Priority.allCases, id: \.rawValue) { priority in
                     Button(action: { item.priority = priority }, label: {
@@ -36,6 +32,10 @@ struct ChecklistItemView: View {
             }
             
             Text(item.name)
+                .onTapGesture {
+                    tempName = item.name
+                    isEditingAlertPresented = true
+                }
             
             Spacer()
             
@@ -43,8 +43,22 @@ struct ChecklistItemView: View {
                 Image(systemName: item.isComplete ? "checkmark.square.fill" : "square")
                     .font(.title)
             }
-            .buttonStyle(BorderlessButtonStyle()) // Allows toggling without triggering the row selection
+            .buttonStyle(BorderlessButtonStyle())
         }
+        .alert("Edit Name", isPresented: $isEditingAlertPresented, actions: {
+            TextField("Enter new name", text: $tempName)
+                .textInputAutocapitalization(
+                    constants.textCasing == .firstWord ? .sentences :
+                        constants.textCasing == .allWords ? .words : .none
+                    )
+                .disableAutocorrection(!constants.showSuggestions)
+            Button("OK") {
+                item.name = tempName.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            Button("Cancel", role: .cancel) {
+                // Discard changes
+            }
+        })
     }
     
     private func checkboxToggle() {
@@ -54,12 +68,13 @@ struct ChecklistItemView: View {
 
     private func giveFeedback() {
         let generator = UINotificationFeedbackGenerator()
-        
         generator.notificationOccurred(.success)
     }
 }
 
 #Preview {
+    let previewConstatns = Constants()
     ChecklistItemView(item: ChecklistItem(name: "Item", order: 1))
         .modelContainer(for: Checklist.self, inMemory: true)
+        .environmentObject(previewConstatns)
 }

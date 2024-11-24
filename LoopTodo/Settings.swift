@@ -10,12 +10,14 @@ import StoreKit
 
 struct Settings: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject private var constants: Constants
     @EnvironmentObject private var store: Store
     @State private var shadowRadius: CGFloat = 10
     @State private var shadowColor: Color = .white
     @State private var showRestoreAlert = false
     @State private var restoreMessage = ""
     @State private var purchaseStatus: PurchaseStatus = .notStarted
+    
     enum PurchaseStatus {
         case notStarted
         case inProgress
@@ -100,6 +102,22 @@ struct Settings: View {
                 
                 Spacer()
                 
+                VStack {
+                    Text("Keyboard Settings")
+                        .font(.headline)
+                    
+                    Picker("Text Casing", selection: $constants.textCasing) {
+                        ForEach(TextCasing.allCases) { casing in
+                            Text(casing.rawValue).tag(casing)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    
+                    Toggle("Show Suggestions", isOn: $constants.showSuggestions)
+                        .padding(.horizontal)
+                }
+                .padding()
+                
                 Text("© 2024 Steve Parker")
                     .padding(.top, 60)
                 Text("https://www.parker1978.com")
@@ -174,6 +192,8 @@ struct Settings: View {
 
 #Preview {
     let previewStore = Store()
+    let previewConstants = Constants()
     Settings()
         .environmentObject(previewStore)
+        .environmentObject(previewConstants)
 }

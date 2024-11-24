@@ -25,12 +25,14 @@ struct ListsLoopApp: App {
         }
     }()
     
+    @StateObject private var constants = Constants()
     @StateObject private var store = Store()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(store)
+                .environmentObject(constants)
                 .task {
                     await store.loadProducts()
                 }
@@ -65,7 +67,7 @@ struct ListsLoopApp: App {
 //
 // Version 2.0 Features
 //
-// Tap on text to edit
+// ✅ Tap on text to edit
 //
 // Use siri to add items
 //
@@ -73,8 +75,7 @@ struct ListsLoopApp: App {
 // * default case
 // * suggestions on/off
 //
-// Background on main screen with a call to action
-// when there are no active lists
+// ✅ Call to action when no lists
 //
 // Show/Hide the item detail sections
 //
@@ -88,3 +89,5 @@ struct ListsLoopApp: App {
 //
 // Have a way to set a time or certain time of day
 // to get a notification about a particular list.
+//
+// Import / Export data

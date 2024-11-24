@@ -11,6 +11,7 @@ import TipKit
 
 struct ChecklistDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var constants: Constants
     @Bindable var checklist: Checklist
     @State private var newItemName: String = ""
     @State private var showingAddItemAlert = false
@@ -149,6 +150,11 @@ struct ChecklistDetailView: View {
             }
             .alert("Add New Item", isPresented: $showingAddItemAlert) {
                 TextField("Item Name", text: $newItemName)
+                    .textInputAutocapitalization(
+                        constants.textCasing == .firstWord ? .sentences :
+                            constants.textCasing == .allWords ? .words : .none
+                    )
+                    .disableAutocorrection(!constants.showSuggestions)
                 Button("Add", action: addItem)
                 Button("Cancel", role: .cancel) { }
             }
@@ -162,7 +168,7 @@ struct ChecklistDetailView: View {
         
         guard !newItemName.isEmpty else { return }
         let order = checklist.items?.count ?? 0
-        let newItem = ChecklistItem(name: newItemName, order: order)
+        let newItem = ChecklistItem(name: newItemName.trimmingCharacters(in: .whitespacesAndNewlines), order: order)
         if checklist.items == nil {
             checklist.items = []
         }
@@ -230,6 +236,7 @@ struct ChecklistDetailView: View {
 
 // MARK: Preview
 #Preview {
+    let previewConstants = Constants()
     var testChecklist: Checklist {
         let checklist = Checklist(name: "Test Checklist")
         checklist.items = [
@@ -243,4 +250,5 @@ struct ChecklistDetailView: View {
 
     return ChecklistDetailView(checklist: testChecklist)
         .modelContainer(for: Checklist.self, inMemory: true)
+        .environmentObject(previewConstants)
 }

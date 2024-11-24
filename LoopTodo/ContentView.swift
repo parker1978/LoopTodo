@@ -44,58 +44,69 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(sortedChecklists) { checklist in
-                    NavigationLink {
-                        ChecklistDetailView(checklist: checklist)
-                    } label: {
-                        Text(checklist.name)
+            if checklists.isEmpty {
+                CallToAction {
+                    if canAddChecklist {
+                        showingAddChecklistAlert = true
+                    } else {
+                        showingUnlockAlert = true
+                        print("Cannot add more checklists without purchasing")
                     }
                 }
-                .onDelete(perform: deleteChecklists)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showSettings.toggle()
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if showSortOrderText {
-                        Text(sortOrder == .alphabetical ? "Alphabetical" : "By Creation Date")
-                            .font(.caption)
-                            .padding(4)
-                            .background(Color.gray.opacity(0.8))
-                            .cornerRadius(8)
-                            .foregroundColor(.white)
-                            .transition(.opacity.combined(with: .slide))
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: toggleSortOrder) {
-                        Image(systemName: (sortOrder == .alphabetical) ? "calendar" : "character.square")
-                            .contentTransition(.symbolEffect(.replace.upUp.byLayer, options: .nonRepeating))
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    Button(action: {
-                        if canAddChecklist {
-                            showingAddChecklistAlert = true
-                        } else {
-                            showingUnlockAlert = true
-                            print("Cannot add more checklists without purchasing")
+            } else {
+                List {
+                    ForEach(sortedChecklists) { checklist in
+                        NavigationLink {
+                            ChecklistDetailView(checklist: checklist)
+                        } label: {
+                            Text(checklist.name)
                         }
-                    }, label: {
-                        Image(systemName: "plus.circle.fill")
-                            .symbolEffect(.bounce, value: addBounce)
-                            .fontWeight(.light)
-                            .font(.system(size:42))
-                    })
+                    }
+                    .onDelete(perform: deleteChecklists)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            showSettings.toggle()
+                        } label: {
+                            Image(systemName: "gear")
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        if showSortOrderText {
+                            Text(sortOrder == .alphabetical ? "Alphabetical" : "By Creation Date")
+                                .font(.caption)
+                                .padding(4)
+                                .background(Color.gray.opacity(0.8))
+                                .cornerRadius(8)
+                                .foregroundColor(.white)
+                                .transition(.opacity.combined(with: .slide))
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: toggleSortOrder) {
+                            Image(systemName: (sortOrder == .alphabetical) ? "calendar" : "character.square")
+                                .contentTransition(.symbolEffect(.replace.upUp.byLayer, options: .nonRepeating))
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        EditButton()
+                    }
+                    ToolbarItem(placement: .bottomBar) {
+                        Button(action: {
+                            if canAddChecklist {
+                                showingAddChecklistAlert = true
+                            } else {
+                                showingUnlockAlert = true
+                                print("Cannot add more checklists without purchasing")
+                            }
+                        }, label: {
+                            Image(systemName: "plus.circle.fill")
+                                .symbolEffect(.bounce, value: addBounce)
+                                .fontWeight(.light)
+                                .font(.system(size:42))
+                        })
+                    }
                 }
             }
         } detail: {
@@ -138,7 +149,7 @@ struct ContentView: View {
     private func addChecklist() {
         guard !newChecklistName.isEmpty else { return }
         withAnimation {
-            let newChecklist = Checklist(name: newChecklistName)
+            let newChecklist = Checklist(name: newChecklistName.trimmingCharacters(in: .whitespacesAndNewlines))
             modelContext.insert(newChecklist)
             newChecklistName = ""
         }
