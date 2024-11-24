@@ -48,7 +48,7 @@ struct ContentView: View {
             if checklists.isEmpty {
                 CallToAction {
                     if canAddChecklist {
-                        showingAddChecklistAlert = true
+                        showPopup.toggle()
                     } else {
                         showingUnlockAlert = true
                         print("Cannot add more checklists without purchasing")
