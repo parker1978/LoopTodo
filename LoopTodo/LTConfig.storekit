@@ -102,7 +102,7 @@
           ],
           "productID" : "unlimited",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "unlimited",
+          "referenceName" : "Unlimited",
           "subscriptionGroupID" : "BEA5EBC7",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
